@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html>
 
-   <head>
-      <title>Backend Challenges | Free Code Camp</title>
-      <link rel="shortcut icon" href="https://cdn.hyperdev.com/us-east-1%3A52a203ff-088b-420f-81be-45bf559d01b1%2Ffavicon.ico" type="image/x-icon"/>
-      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-      <link href="/public/style.css" rel="stylesheet" type="text/css">
-   </head>
+<head>
+    <title>Timestamp Conversion Service</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
 
-   <body>
-      <div class="container">
-         <h1>Manage Node.js projects and npm packages using package.json</h1>
-         <h3>Part 1 of Free Code Camp Backend Challenges</h3>
-      </div>
-   </body>
+<body>
+    <div class="container">
+        <h1>Timestamp Service</h1>
+        <p> This service will accept a date or timestamp in natural language (
+            <code> January 1 2018 </code>) or unix timestamp(
+            <code> 1514764800 </code>) form and covert it to the other type.
+        </p>
+
+        <h3> Example usage</h3>
+
+        <h4>Request</h4>
+
+        <code> 
+        GET https://quark-bead.glitch.me/1450137600
+        </code>
+        <br>
+        <code>
+        GET https://quark-bead.glitch.me/December%2015,%202015
+        </code>
+
+        <h4>Response</h4>
+
+        <code>
+          {"unix":1450137600,"natural":"December 15, 2015"}
+        </code>
+
+    </div>
+</body>
 
 </html>
