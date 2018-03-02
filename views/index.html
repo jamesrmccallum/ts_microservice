@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Timestamp Conversion Service</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-</head>
+   <head>
+      <title>Timestamp Conversion Service</title>
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   </head>
 
-<body>
-    <div class="container">
-        <h1>Timestamp Service</h1>
-        <p> This service will accept a date or timestamp in natural language (
-            <code> January 1 2018 </code>) or unix timestamp(
-            <code> 1514764800 </code>) form and covert it to the other type.
+   <body>
+      <div class="container">
+         <h1>Timestamp Service</h1>
+         <p> This service will accept a date or timestamp in natural language 
+           (<code> January 1 2018 </code>) or unix timestamp(<code> 1514764800 </code>) form and covert it to the other type.
         </p>
-
-        <h3> Example usage</h3>
-
+        
+       <h3> Example usage</h3>
+        
         <h4>Request</h4>
-
+        
         <code> 
         GET https://quark-bead.glitch.me/1450137600
         </code>
@@ -25,14 +24,14 @@
         <code>
         GET https://quark-bead.glitch.me/December%2015,%202015
         </code>
-
+        
         <h4>Response</h4>
-
+  
         <code>
           {"unix":1450137600,"natural":"December 15, 2015"}
         </code>
 
-    </div>
-</body>
+      </div>
+   </body>
 
 </html>
