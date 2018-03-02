@@ -44,22 +44,25 @@ app.route('/:date')
     let params: { date: string } = req.params;
     let dt = undefined;
 
+    let result: { unix: null | number, natural: null | string } = {
+      unix: null,
+      natural: null
+    }
+
     // if param is numeric
     if (!isNaN(parseInt(params.date))) {
       dt = new Date(parseInt(params.date) * 1000);
+
+      // Otherwise we'll try parsing it as a date
     } else {
-      try {
-        dt = new Date(params.date);
-      }
-      catch (e) {
-        res.status(e.status || 500).type('txt').send(e.message || 'Invalid Date')
+      dt = Date.parse(params.date);
+      if (isNaN(dt)) {
+        res.type('txt').send(JSON.stringify(result))
       }
     }
 
-    let result = {
-      unix: dt.getTime() / 1000,
-      natural: formatDate(dt)
-    }
+    result.unix = (<Date>dt!).getTime() / 1000,
+    result.natural = formatDate(<Date>dt!)
 
     res.type('txt').send(JSON.stringify(result))
   })

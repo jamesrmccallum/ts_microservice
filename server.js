@@ -36,22 +36,23 @@ app.route('/:date')
     .get(function (req, res) {
     var params = req.params;
     var dt = undefined;
+    var result = {
+        unix: null,
+        natural: null
+    };
     // if param is numeric
     if (!isNaN(parseInt(params.date))) {
         dt = new Date(parseInt(params.date) * 1000);
+        // Otherwise we'll try parsing it as a date
     }
     else {
-        try {
-            dt = new Date(params.date);
-        }
-        catch (e) {
-            res.status(e.status || 500).type('txt').send(e.message || 'Invalid Date');
+        dt = Date.parse(params.date);
+        if (isNaN(dt)) {
+            res.type('txt').send(JSON.stringify(result));
         }
     }
-    var result = {
-        unix: dt.getTime() / 1000,
-        natural: formatDate(dt)
-    };
+    result.unix = dt.getTime() / 1000,
+        result.natural = formatDate(dt);
     res.type('txt').send(JSON.stringify(result));
 });
 // Respond not found to all the wrong routes
