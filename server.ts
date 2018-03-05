@@ -1,5 +1,7 @@
 var fs = require('fs');
 import * as express from 'express'
+import { stringify } from 'querystring';
+import { IncomingHttpHeaders } from "http";
 var app = express();
 
 if (!process.env.DISABLE_XORIGIN) {
@@ -38,7 +40,7 @@ app.route('/')
   })
 
 
-app.route('/:date')
+app.route('/tsservice/:date')
   .get(function (req, res) {
 
     let params: { date: string } = req.params;
@@ -61,13 +63,45 @@ app.route('/:date')
       }
     }
 
-    result.unix = (<Date>dt!).getTime() / 1000,
+    result.unix = (<Date>dt!).getTime() / 1000
+
     result.natural = formatDate(<Date>dt!)
 
     res.type('txt').send(JSON.stringify(result))
   })
 
+function parseHeaders(headers: IncomingHttpHeaders) {
+
+  if (headers['user-agent']) {
+    var { os, ip } = parseUserAgent(<string>headers['user-agent'])
+  }
+
+  return {
+    os: os || 'unknown',
+    ip: ip || 'unknown',
+    language: <string>headers['accept-language'] || 'unknown'
+  }
+}
+
+function parseUserAgent(userAgent: string) {
+
+  let osMatches = userAgent.match(/\(([^()]+)\)/);
+  let ipMatches = userAgent.match(/\d{1,4}\.\d{1,4}\.\d{1,4}\.\d{1,4}/)
+
+  return {
+    os: osMatches ? osMatches[0] : undefined,
+    ip: ipMatches ? ipMatches[0] : undefined
+  }
+}
+
+app.route('/headers')
+  .get((req, res) => {
+    let headers = JSON.stringify(parseHeaders(req.headers))
+    res.type('txt').send(headers)
+  })
+
 // Respond not found to all the wrong routes
+
 app.use(function (req, res, next) {
   res.status(404);
   res.type('txt').send("That's not a valid route. Sorry!");

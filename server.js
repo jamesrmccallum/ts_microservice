@@ -32,7 +32,7 @@ app.route('/')
     .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
-app.route('/:date')
+app.route('/tsservice/:date')
     .get(function (req, res) {
     var params = req.params;
     var dt = undefined;
@@ -51,9 +51,32 @@ app.route('/:date')
             res.type('txt').send(JSON.stringify(result));
         }
     }
-    result.unix = dt.getTime() / 1000,
-        result.natural = formatDate(dt);
+    result.unix = dt.getTime() / 1000;
+    result.natural = formatDate(dt);
     res.type('txt').send(JSON.stringify(result));
+});
+function parseHeaders(headers) {
+    if (headers['user-agent']) {
+        var _a = parseUserAgent(headers['user-agent']), os = _a.os, ip = _a.ip;
+    }
+    return {
+        os: os || 'unknown',
+        ip: ip || 'unknown',
+        language: headers['accept-language'] || 'unknown'
+    };
+}
+function parseUserAgent(userAgent) {
+    var osMatches = userAgent.match(/\(([^()]+)\)/);
+    var ipMatches = userAgent.match(/\d{1,4}\.\d{1,4}\.\d{1,4}\.\d{1,4}/);
+    return {
+        os: osMatches ? osMatches[0] : undefined,
+        ip: ipMatches ? ipMatches[0] : undefined
+    };
+}
+app.route('/headers')
+    .get(function (req, res) {
+    var headers = JSON.stringify(parseHeaders(req.headers));
+    res.type('txt').send(headers);
 });
 // Respond not found to all the wrong routes
 app.use(function (req, res, next) {
